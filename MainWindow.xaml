@@ -1,0 +1,74 @@
+﻿<Window x:Class="rebarBenderMulti.MainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:rebarBenderMulti"
+             mc:Ignorable="d"
+             Title="R2R" Height="1000" Width="2000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Row 0 for buttons -->
+            <RowDefinition Height="600" />
+            <!-- Set the height of Row 1 to 600 units -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- Buttons Row, centered in column 0 -->
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Gather RAM Level" Margin="5" Click="getRAMResults_Click" />
+            <!-- Add ListBox centered below the button -->
+            <ListBox Name="ramFloorComboBox" Width="100" Height="25" HorizontalAlignment="Center" />
+            <Button Content="Select Level" Margin="5" Click="getGridInfo_Click"/>
+
+        </StackPanel>
+
+        <!-- Buttons Row, centered in column 1 -->
+        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="GatherGridsButton" Content="Gather Revit Grids" Margin="5" Click="GatherGridsButton_Click" />
+            
+        </StackPanel>
+        
+        
+
+        <!-- Left column content RAM Info, ROW 2 COLUMN 0 -->
+        <ScrollViewer Name="scrollViewer" Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Border BorderBrush="Black" BorderThickness="4">
+                <Canvas Name="ramCanvas" Width="600" Height="600" MouseMove="Canvas_MouseMove">
+                    <!-- Your lines and circles go here -->
+                </Canvas>
+            </Border>
+        </ScrollViewer>
+
+        <!-- Left column content RAM Info -->
+        <StackPanel Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+            <Button Content="Clear RAM Selection" Margin="10" Click="ramClearSelection_Click" />
+
+            <!-- List of selected line names -->
+            <ListBox Name="ramSelectedLinesListBox" Width="200" Height="100" VerticalAlignment="Top" />
+        </StackPanel>
+
+        <!-- Right column content Revit Info, ROW 2 COLUMN 1 -->
+        <ScrollViewer Name="scrollViewer1" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Border BorderBrush="Black" BorderThickness="4">
+                <Canvas Name="revitCanvas" Width="600" Height="600" MouseMove="Canvas_MouseMove">
+                    <!-- Your lines and circles go here -->
+                </Canvas>
+            </Border>
+        </ScrollViewer>
+
+        <!-- Right column content Revit Info, ROW 3, Column 1... unsure why this is not row = 2 -->
+        <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+            <Button Content="Clear Revit Selection" Margin="10" Click="revitClearSelection_Click" />
+
+            <!-- List of selected line names -->
+            <ListBox Name="revitSelectedLinesListBox" Width="200" Height="100" VerticalAlignment="Top" />
+        </StackPanel>
+    </Grid>
+</Window>
