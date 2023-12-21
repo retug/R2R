@@ -12,13 +12,17 @@
             <!-- Row 0 for buttons -->
             <RowDefinition Height="600" />
             <!-- Set the height of Row 1 to 600 units -->
-            <RowDefinition Height="*" />
+            <RowDefinition Height="175" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
+        
 
         <!-- Buttons Row, centered in column 0 -->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -62,7 +66,8 @@
                 </Canvas>
             </Border>
         </ScrollViewer>
-
+        <!-- Horizontal bar above row 4 -->
+        <Border Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" BorderBrush="Black" Padding="5,0" />
         <!-- Right column content Revit Info, ROW 3, Column 1... unsure why this is not row = 2 -->
         <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
             <Button Content="Clear Revit Selection" Margin="10" Click="revitClearSelection_Click" />
@@ -70,5 +75,90 @@
             <!-- List of selected line names -->
             <ListBox Name="revitSelectedLinesListBox" Width="200" Height="100" VerticalAlignment="Top" />
         </StackPanel>
+        
+        
+        <Grid Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                
+            </Grid.ColumnDefinitions>
+
+            <!-- Button 1: Save -->
+            <Button Grid.Column="0" Content="Save" Click="SaveButton_Click" />
+
+            <!-- Spacer -->
+            <GridSplitter Grid.Column="1" Width="20" HorizontalAlignment="Stretch" />
+
+            <!-- Button 2: Import -->
+            <Button Grid.Column="2" Content="Import" Click="LoadButton_Click" />
+
+            <!-- Spacer -->
+            <GridSplitter Grid.Column="3" Width="20" HorizontalAlignment="Stretch" />
+
+            <!-- Button 2: Import -->
+            <Button Grid.Column="4" Content="Calculate X Y and Rotation" Click="Calc_R2R" />
+        </Grid>
+        <Grid Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="X" VerticalAlignment="Center" Padding="5"/>
+            <TextBox Grid.Column="1" Name="XTextBox" Width="100">
+                <TextBox.Text>
+                    <Binding Path="XValue" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <!-- Spacer -->
+            <GridSplitter Grid.Column="2" Width="20" HorizontalAlignment="Stretch" />
+            
+
+            <!-- Button 2: Import -->
+            <TextBlock Grid.Column="3" Text="Y" VerticalAlignment="Center" Padding="5" />
+            <TextBox Grid.Column="4" Name="YTextBox" Width="100">
+                <TextBox.Text>
+                    <Binding Path="YValue" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <!-- Spacer -->
+            <GridSplitter Grid.Column="5" Width="20" HorizontalAlignment="Stretch" />
+
+            <TextBlock  Grid.Column="6" Text="Rot" VerticalAlignment="Center" Padding="5" />
+            <TextBox Grid.Column="7" Name="RotTextBox" Width="100">
+                <TextBox.Text>
+                    <Binding Path="RotValue" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+
+
+
+        </Grid>
+
     </Grid>
 </Window>
