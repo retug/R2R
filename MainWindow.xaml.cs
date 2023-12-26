@@ -707,13 +707,14 @@ namespace rebarBenderMulti
             }
             return rotationR2R;
         }
-
-
-
-
         ////////////////////////
         //END OF SAVE AND READ PORTION OF THE CODE
         /////////////////////////
+        private void GatherBeamsButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<CustomLine> revitBeamsGathered = new List<CustomLine>();
+            revitInfo.GatherRevitBeams(sender, e, doc, uidoc, ref revitBeamsGathered);
+        }
 
 
     }

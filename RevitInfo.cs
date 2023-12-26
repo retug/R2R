@@ -11,6 +11,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Grid = Autodesk.Revit.DB.Grid;
 
+
 namespace rebarBenderMulti
 {
     public class RevitInfo
@@ -55,6 +56,45 @@ namespace rebarBenderMulti
                     double endGridY = endGrid.Y;
                     RevitGrids.Add(new CustomLine(startPoint, endPoint, gridName));
 
+                }
+            }
+        }
+
+        public void GatherRevitBeams(object sender, RoutedEventArgs e, Document doc, UIDocument uidoc, ref List<CustomLine> RevitBeams)
+        {
+
+            //we will pass in doc and uidoc becuase these are already being accessed in the mainwindow xaml code
+            IList<Reference> pickedObjs = uidoc.Selection.PickObjects(ObjectType.Element, "Select Elements");
+
+            // Create a filter for structural framing category
+            ElementCategoryFilter categoryFilter = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFraming);
+            // Use the filter to collect elements
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            ICollection<Element> structuralFramingElements = collector.WherePasses(categoryFilter).OfCategory(BuiltInCategory.OST_StructuralFraming).ToElements();
+
+            if (structuralFramingElements.Count == 0)
+            {
+                TaskDialog.Show("No Structural Framing Elements", "There are no structural framing elements in the selected elements.");
+            }
+
+            // Iterate through the structural framing elements and access their properties
+            foreach (Element structuralFramingElement in structuralFramingElements)
+            {
+                if (structuralFramingElement is FamilyInstance framingInstance)
+                {
+                    // Access framing instance properties
+                    LocationCurve locationCurve = framingInstance.Location as LocationCurve;
+                    Curve curve = locationCurve.Curve;
+
+                    // Access curve properties
+                    XYZ startFraming = curve.GetEndPoint(0);
+                    XYZ endFraming = curve.GetEndPoint(1);
+
+                    System.Windows.Point startPoint = new System.Windows.Point(startFraming.X, startFraming.Y);
+                    System.Windows.Point endPoint = new System.Windows.Point(endFraming.X, endFraming.Y);
+                    string framingName = framingInstance.Symbol.Family.Name;
+
+                    RevitBeams.Add(new CustomLine(startPoint, endPoint, framingName));
                 }
             }
         }

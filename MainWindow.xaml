@@ -36,6 +36,7 @@
         <!-- Buttons Row, centered in column 1 -->
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="GatherGridsButton" Content="Gather Revit Grids" Margin="5" Click="GatherGridsButton_Click" />
+            <Button x:Name="GatherBeamsButton" Content="Select Revit Beams" Margin="5" Click="GatherBeamsButton_Click"  />
             
         </StackPanel>
         
