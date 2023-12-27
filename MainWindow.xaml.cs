@@ -42,7 +42,7 @@ namespace rebarBenderMulti
         public UIDocument uidoc {get; }
         public Document doc { get; }
 
-        private RevitInfo revitInfo; // Create an instance of RevitInfo, not sure why I have to do this?
+        public RevitInfo revitInfo; // Create an instance of RevitInfo, not sure why I have to do this?
 
         // Create properties for data binding
         public decimal XValue { get; set; }
@@ -84,7 +84,10 @@ namespace rebarBenderMulti
             // Initialize the RevitInfo instance
             revitInfo = new RevitInfo();
             GatherGridsButton.Click += GatherGridsButton_Click;
-            
+
+            // Attach the event handler to the Click event of GatherBeamsButton
+            GatherBeamsButton.Click += GatherBeamsButton_Click;
+
         }
         private void GatherGridsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -710,10 +713,24 @@ namespace rebarBenderMulti
         ////////////////////////
         //END OF SAVE AND READ PORTION OF THE CODE
         /////////////////////////
+        ///
         private void GatherBeamsButton_Click(object sender, RoutedEventArgs e)
         {
-            List<CustomLine> revitBeamsGathered = new List<CustomLine>();
-            revitInfo.GatherRevitBeams(sender, e, doc, uidoc, ref revitBeamsGathered);
+            //DOING THIS HERE
+            
+            this.Hide();
+            try
+            {
+                var elements = uidoc.Selection.PickObjects(ObjectType.Element, "Select Elements");
+                Console.WriteLine(elements.Count);
+                MessageBox.Show($"Seclted X Elements: {elements.Count}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception)
+            {
+
+            }
+            this.ShowDialog();
+
         }
 
 
