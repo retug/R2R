@@ -717,13 +717,28 @@ namespace rebarBenderMulti
         private void GatherBeamsButton_Click(object sender, RoutedEventArgs e)
         {
             //DOING THIS HERE
-            
+            //This is the main window popup
             this.Hide();
             try
             {
-                var elements = uidoc.Selection.PickObjects(ObjectType.Element, "Select Elements");
-                Console.WriteLine(elements.Count);
-                MessageBox.Show($"Seclted X Elements: {elements.Count}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //var elements = uidoc.Selection.PickObjects(ObjectType.Element, "Select Elements");
+                IList<Reference> elements = uidoc.Selection.PickObjects(ObjectType.Element, "Select Elements");
+                ICollection<ElementId> selectedElementIds = new List<ElementId>();
+
+                foreach (Reference elementRef in elements) {
+                    ElementId elementId = elementRef.ElementId;
+                    selectedElementIds.Add(elementId);
+                }
+                // Create a FilteredElementCollector to filter elements by category
+                FilteredElementCollector collector = new FilteredElementCollector(doc, selectedElementIds);
+                // Use LINQ to filter elements by category (Structural Framing)
+                IEnumerable<Element> structuralFramingElements = collector
+                    .OfClass(typeof(FamilyInstance)) // Assuming structural framing elements are FamilyInstances
+                    .Where(elem => elem.Category.Name == "Structural Framing");
+
+                // Now you have a list of structural framing elements in the selected set
+
+                MessageBox.Show($"Total Selected Elements: {elements.Count}\nTotal Selected Framing Members: {structuralFramingElements.Count()}", "Selection Complete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception)
             {

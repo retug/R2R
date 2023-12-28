@@ -15,6 +15,7 @@
             <RowDefinition Height="175" />
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -155,10 +156,10 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-
-
-
-
+        </Grid>
+        <Grid Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <!-- Bottom row content, centered -->
+            <Button Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Map the Beams" Padding="10" Click="MapBeamsButton_Click" />
         </Grid>
 
     </Grid>
