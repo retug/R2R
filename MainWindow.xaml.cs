@@ -748,7 +748,14 @@ namespace rebarBenderMulti
 
         }
 
+        private void MapBeamsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Create an instance of the MapBeamsWindow
+            mapWindow mapBeamsWindow = new mapWindow();
 
+            // Show the MapBeamsWindow as a dialog
+            mapBeamsWindow.ShowDialog();
+        }
     }
 }
 

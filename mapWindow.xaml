@@ -1,0 +1,12 @@
+﻿<Window x:Class="rebarBenderMulti.mapWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:rebarBenderMulti"
+        mc:Ignorable="d"
+        Title="Mapping Window" Height="1000" Width="2000">
+    <Grid>
+		<Button HorizontalAlignment="Center" Content="Map the Beams" Padding="10" />
+    </Grid>
+</Window>
