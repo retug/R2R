@@ -20,6 +20,7 @@ using System.Globalization;
 using Microsoft.Win32;
 using Point = System.Windows.Point;
 using System.Windows.Shapes;
+using Line = System.Windows.Shapes.Line;
 
 namespace rebarBenderMulti
 {
@@ -43,6 +44,12 @@ namespace rebarBenderMulti
         public Document doc { get; }
 
         public RevitInfo revitInfo; // Create an instance of RevitInfo, not sure why I have to do this?
+
+        public Window mapWindowRoot { get; }
+
+        // Declare structuralFramingElements as a field or property
+        public IEnumerable<Element> structuralFramingElements { get; set; }
+        //public Canvas mapCanvas { get; set; }
 
         // Create properties for data binding
         public decimal XValue { get; set; }
@@ -732,7 +739,7 @@ namespace rebarBenderMulti
                 // Create a FilteredElementCollector to filter elements by category
                 FilteredElementCollector collector = new FilteredElementCollector(doc, selectedElementIds);
                 // Use LINQ to filter elements by category (Structural Framing)
-                IEnumerable<Element> structuralFramingElements = collector
+                structuralFramingElements = collector
                     .OfClass(typeof(FamilyInstance)) // Assuming structural framing elements are FamilyInstances
                     .Where(elem => elem.Category.Name == "Structural Framing");
 
@@ -745,16 +752,62 @@ namespace rebarBenderMulti
 
             }
             this.ShowDialog();
-
         }
+
+
 
         private void MapBeamsButton_Click(object sender, RoutedEventArgs e)
         {
             // Create an instance of the MapBeamsWindow
             mapWindow mapBeamsWindow = new mapWindow();
 
-            // Show the MapBeamsWindow as a dialog
+            // Set the mapCanvas property of mapBeamsWindow
+            mapBeamsWindow.mapCanvas = mapBeamsWindow.FindName("mapCanvas") as Canvas;
+
+            // Access the mapCanvas using the property
+            Canvas mapCanvas = mapBeamsWindow.mapCanvas;
+
+
+            foreach (Element elem in structuralFramingElements)
+            {
+                LocationCurve locationCurve = (elem.Location as LocationCurve);
+                if (locationCurve != null)
+                {
+                    // Get the start and end points of the structural framing element
+                    XYZ startPoint = locationCurve.Curve.GetEndPoint(0);
+                    XYZ endPoint = locationCurve.Curve.GetEndPoint(1);
+
+                    // Convert Revit coordinates to WPF coordinates (assuming 1:1 mapping)
+                    Point startWpfPoint = new Point(startPoint.X, -startPoint.Y);
+                    Point endWpfPoint = new Point(endPoint.X, -endPoint.Y);
+
+                    // Create a System.Windows.Shapes.Line
+                    Line line = new Line
+                    {
+                        X1 = startWpfPoint.X,
+                        Y1 = startWpfPoint.Y,
+                        X2 = endWpfPoint.X,
+                        Y2 = endWpfPoint.Y,
+                        Stroke = Brushes.Red,
+                        StrokeThickness = 2
+                    };
+
+                    // Add the line to the mapCanvas
+                    mapCanvas.Children.Add(line);
+                }
+            }
+
+
+            // Update the layout
+            mapCanvas.UpdateLayout();
+            // Show the mapWindow as a dialog
+            //mapBeamsWindow.ShowDialog();
+
+            // Show the mapWindow as a dialog
             mapBeamsWindow.ShowDialog();
+
+
+
         }
     }
 }
