@@ -55,8 +55,8 @@
 
 			<!-- Checkboxes in Row 1 -->
 			<StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-				<CheckBox Content="RAM" Margin="5" />
-				<CheckBox Content="Revit" Margin="5" />
+				<CheckBox Content="RAM" Margin="5" IsChecked="True" />
+				<CheckBox Content="Revit" Margin="5" IsChecked="True"/>
 			</StackPanel>
 		</Grid>
 	</Grid>

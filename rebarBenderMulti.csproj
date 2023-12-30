@@ -68,12 +68,13 @@
     <Compile Include="RAMGrid.cs" />
     <Compile Include="r2rPoint.cs" />
     <Compile Include="CustomLine.cs" />
+    <Compile Include="RevitBeam.cs" />
     <Compile Include="RevitInfo.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-	<Compile Include="mapWindow.xaml.cs">
+    <Compile Include="mapWindow.xaml.cs">
       <DependentUpon>mapWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

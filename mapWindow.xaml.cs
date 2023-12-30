@@ -43,25 +43,27 @@ namespace rebarBenderMulti
 
             if (e.Delta > 0)
             {
-                // Zoom in // You can adjust the zoom factor as needed
-                mapZoomFactor *= 1.2;
+                // Zoom in
+                mapZoomFactor *= 1.2; // You can adjust the zoom factor as needed
             }
             else
             {
                 // Zoom out
                 mapZoomFactor /= 1.2;
             }
-
             // Apply the zoom factor to the canvas content
-            ApplyZoomAndPanTransform();
+            mapCanvas.LayoutTransform = new ScaleTransform(mapZoomFactor, mapZoomFactor);
         }
 
         // PANNING FUNCTION
         private void mapCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            //PANNING FUNCTION
             mapLastMousePosition = e.GetPosition(scrollViewer);
             mapCanvas.CaptureMouse();
+
         }
+
 
         private void mapCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

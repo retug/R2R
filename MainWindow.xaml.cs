@@ -767,34 +767,39 @@ namespace rebarBenderMulti
             // Access the mapCanvas using the property
             Canvas mapCanvas = mapBeamsWindow.mapCanvas;
 
+            //Creating a Custom Revit Beam for each elemtn
 
             foreach (Element elem in structuralFramingElements)
             {
-                LocationCurve locationCurve = (elem.Location as LocationCurve);
-                if (locationCurve != null)
+                RevitBeam myRevitBeam = new RevitBeam(elem);
+                // Add the line to the mapCanvas
+                mapCanvas.Children.Add(myRevitBeam.CustomLine);
+
+
+                // Create TextBlock for ElementType name
+                TextBlock ElementTypeText = new TextBlock
                 {
-                    // Get the start and end points of the structural framing element
-                    XYZ startPoint = locationCurve.Curve.GetEndPoint(0);
-                    XYZ endPoint = locationCurve.Curve.GetEndPoint(1);
+                    Text = myRevitBeam.ElementTypeName,
+                    Foreground = Brushes.Black,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Opacity = 0.5 // Adjust the value based on your preference
 
-                    // Convert Revit coordinates to WPF coordinates (assuming 1:1 mapping)
-                    Point startWpfPoint = new Point(startPoint.X, -startPoint.Y);
-                    Point endWpfPoint = new Point(endPoint.X, -endPoint.Y);
+                };
 
-                    // Create a System.Windows.Shapes.Line
-                    Line line = new Line
-                    {
-                        X1 = startWpfPoint.X,
-                        Y1 = startWpfPoint.Y,
-                        X2 = endWpfPoint.X,
-                        Y2 = endWpfPoint.Y,
-                        Stroke = Brushes.Red,
-                        StrokeThickness = 2
-                    };
+                // Set the position of the TextBlock
+                Canvas.SetLeft(ElementTypeText, myRevitBeam.centerX);
+                Canvas.SetTop(ElementTypeText, myRevitBeam.centerY);
 
-                    // Add the line to the mapCanvas
-                    mapCanvas.Children.Add(line);
-                }
+                // Calculate the angle between the beam and the horizontal axis
+                double angle = Math.Atan2(myRevitBeam.CustomLine.Y2 - myRevitBeam.CustomLine.Y1, myRevitBeam.CustomLine.X2 - myRevitBeam.CustomLine.X1) * (180 / Math.PI);
+
+                // Apply rotation transform to the TextBlock
+                ElementTypeText.RenderTransform = new RotateTransform(angle, ElementTypeText.ActualWidth / 2, ElementTypeText.ActualHeight / 2);
+
+                mapCanvas.Children.Add(ElementTypeText);
+
+
             }
 
 
