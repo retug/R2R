@@ -55,13 +55,21 @@
 
             <!-- Checkboxes in Row 1 -->
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <CheckBox Content="RAM" Margin="5" IsChecked="True" Checked="CheckBox_Checked" />
+                <CheckBox Content="RAM" Margin="5" IsChecked="True" Click="CheckBox_Checked_RAM" />
+                <!-- Transparency Label -->
+                <TextBlock Text="Transparency" Margin="5"/>
+                <!-- Slider -->
+                <Slider x:Name="ramTransparencySlider" Minimum="0" Maximum="1" Value="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" TickPlacement="BottomRight" ValueChanged="ramSlider_ValueChanged"/>
+
+                <!-- Transparency Value -->
+                <TextBlock x:Name="ramTransparencyValueText" Text="{Binding ElementName=ramTransparencySlider, Path=Value, StringFormat={}{0:P0}}" Margin="5"/>
+                
+                
                 <CheckBox Content="Revit" Margin="5" IsChecked="True" Click="CheckBox_Checked_Revit"/>
                 <!-- Transparency Label -->
                 <TextBlock Text="Transparency" Margin="5"/>
-                <Slider x:Name="transparencySlider" Minimum="0" Maximum="1" Value="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" TickPlacement="BottomRight" ValueChanged="Slider_ValueChanged"/>
-
                 <!-- Slider -->
+                <Slider x:Name="transparencySlider" Minimum="0" Maximum="1" Value="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" TickPlacement="BottomRight" ValueChanged="Slider_ValueChanged"/>            
 
                 <!-- Transparency Value -->
                 <TextBlock x:Name="transparencyValueText" Text="{Binding ElementName=transparencySlider, Path=Value, StringFormat={}{0:P0}}" Margin="5"/>

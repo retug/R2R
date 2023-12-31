@@ -24,6 +24,7 @@ namespace rebarBenderMulti
         private double mapZoomFactor = 1.0;
         private System.Windows.Point mapLastMousePosition;
         public List<RevitBeam> revitBeamsList { get; set; }
+        public List<RAMBeam> ramBeamsList { get; set; }
 
 
         public mapWindow()
@@ -100,9 +101,36 @@ namespace rebarBenderMulti
             mapCanvas.RenderTransform = transformGroup;
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void CheckBox_Checked_RAM(object sender, RoutedEventArgs e)
         {
+            CheckBox checkBox = (CheckBox)sender;
 
+            if (checkBox.IsChecked == true)
+            {
+                // Checkbox is checked, add all RAMBeams to the canvas
+                foreach (RAMBeam ramBeam in ramBeamsList)
+                {
+                    mapCanvas.Children.Add(ramBeam.CustomLine);
+
+                    //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
+                    // Calculate the angle between the beam and the horizontal axis
+                    double angle = Math.Atan2(ramBeam.CustomLine.Y2 - ramBeam.CustomLine.Y1, ramBeam.CustomLine.X2 - ramBeam.CustomLine.X1) * (180 / Math.PI);
+
+                    // Apply rotation transform to the TextBlock
+                    ramBeam.beamName.RenderTransform = new RotateTransform(angle, ramBeam.beamName.ActualWidth / 2, ramBeam.beamName.ActualHeight / 2);
+
+                    mapCanvas.Children.Add(ramBeam.beamName);
+                }
+            }
+            else
+            {
+                // Checkbox is unchecked, remove all RAMBeams from the canvas
+                foreach (RAMBeam ramBeam in ramBeamsList)
+                {
+                    mapCanvas.Children.Remove(ramBeam.CustomLine);
+                    mapCanvas.Children.Remove(ramBeam.beamName);
+                }
+            }
         }
 
         private void CheckBox_Checked_Revit(object sender, RoutedEventArgs e)
@@ -149,6 +177,22 @@ namespace rebarBenderMulti
                     // Update opacity of beamName TextBlock
                     revitBeam.beamName.Opacity = 1 - transparencyValue;
                     revitBeam.CustomLine.Opacity = 1 - transparencyValue;
+                }
+            }
+        }
+
+        private void ramSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (transparencyValueText != null)
+            {
+                double ramTransparencyValue = ramTransparencySlider.Value;
+                ramTransparencyValueText.Text = ramTransparencySlider.Value.ToString("P0");
+
+                foreach (RAMBeam ramBeam in ramBeamsList)
+                {
+                    // Update opacity of beamName TextBlock
+                    ramBeam.beamName.Opacity = 1 - ramTransparencyValue;
+                    ramBeam.CustomLine.Opacity = 1 - ramTransparencyValue;
                 }
             }
         }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:rebarBenderMulti"
              mc:Ignorable="d"
-             Title="R2R" Height="1000" Width="2000">
+             Title="R2R - Input Window" Height="1000" Width="2000">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,6 +27,8 @@
 
         <!-- Buttons Row, centered in column 0 -->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <!-- Add a new button for file selection -->
+            <Button Content="Select RAM File" Margin="5" Click="selectFile_Click"/>
             <Button Content="Gather RAM Level" Margin="5" Click="getRAMResults_Click" />
             <!-- Add ListBox centered below the button -->
             <ListBox Name="ramFloorComboBox" Width="100" Height="25" HorizontalAlignment="Center" />
@@ -46,7 +48,7 @@
         <!-- Left column content RAM Info, ROW 2 COLUMN 0 -->
         <ScrollViewer Name="scrollViewer" Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Border BorderBrush="Black" BorderThickness="4">
-                <Canvas Name="ramCanvas" Width="600" Height="600" MouseMove="Canvas_MouseMove">
+                <Canvas Name="ramCanvas" Width="600" Height="600" Background="LightGray" MouseMove="Canvas_MouseMove">
                     <!-- Your lines and circles go here -->
                 </Canvas>
             </Border>
@@ -90,7 +92,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Button 1: Save -->
-            <Button Grid.Column="0" Content="Save" Click="SaveButton_Click" />
+            <Button Grid.Column="0" Content="Save" Click="SaveButton_Click" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Width="29" />
 
             <!-- Spacer -->
             <GridSplitter Grid.Column="1" Width="20" HorizontalAlignment="Stretch" />
@@ -147,7 +149,7 @@
             <GridSplitter Grid.Column="5" Width="20" HorizontalAlignment="Stretch" />
 
             <TextBlock  Grid.Column="6" Text="Rot" VerticalAlignment="Center" Padding="5" />
-            <TextBox Grid.Column="7" Name="RotTextBox" Width="100">
+            <TextBox Grid.Column="7" Name="RotTextBox" Width="100" HorizontalAlignment="Left">
                 <TextBox.Text>
                     <Binding Path="RotValue" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>

@@ -49,6 +49,8 @@ namespace rebarBenderMulti
 
         // Declare structuralFramingElements as a field or property
         public IEnumerable<Element> structuralFramingElements { get; set; }
+
+        public List<RAMBeam> BeamInfo { get; set; }
         //public Canvas mapCanvas { get; set; }
 
         // Create properties for data binding
@@ -68,7 +70,8 @@ namespace rebarBenderMulti
 
         //Revit Beam List
         public List<RevitBeam> revitBeamsList = new List<RevitBeam>();
-        
+        //RAM Beam List
+        public List<RAMBeam> ramBeamsList = new List<RAMBeam>();
 
 
         public MainWindow(UIDocument UiDoc )
@@ -361,6 +364,7 @@ namespace rebarBenderMulti
             }
         }
 
+        //Need to come back to this function
         private void AdjustZoomToFitLines()
         {
             // Calculate the maximum X and Y coordinates of your lines
@@ -425,12 +429,14 @@ namespace rebarBenderMulti
                 // Extract the Beam Locations from a given Level
 
                 List<RAMBeam> BeamInfo = new List<RAMBeam>();
+
                 RAMInfo.GET_BEAM_INFO(RSSFileName, storyValue, ref BeamInfo);
+
+                ramBeamsList = BeamInfo;
 
                 //Plot all of the lines on the correct canvas
                 foreach (var line in ramGridsGathered)
                 {
-                    //FW - I have no idea why I need to put a negative on the Y VALUES!!! so weird
                     System.Windows.Shapes.Line lineX = new System.Windows.Shapes.Line
                     {
                         X1 = line.StartPoint.X,
@@ -760,13 +766,11 @@ namespace rebarBenderMulti
         }
 
 
-
+        //INITIALIZE THE POPUP WINDOW, PLOT ALL OF THE RESULTS
         private void MapBeamsButton_Click(object sender, RoutedEventArgs e)
         {
             // Create an instance of the MapBeamsWindow
             mapWindow mapBeamsWindow = new mapWindow();
-
-            
 
             // Set the mapCanvas property of mapBeamsWindow
             mapBeamsWindow.mapCanvas = mapBeamsWindow.FindName("mapCanvas") as Canvas;
@@ -774,7 +778,15 @@ namespace rebarBenderMulti
             // Access the mapCanvas using the property
             Canvas mapCanvas = mapBeamsWindow.mapCanvas;
 
-            //Creating a Custom Revit Beam for each elemtn
+            List<double> myNumbers = new List<double> { (double)XValue, (double)YValue, 0 };
+            List<double> myVector = new List<double>();
+            myVector.Add(Math.Cos((double)RotValue * Math.PI / 180));
+            myVector.Add(Math.Sin((double)RotValue * Math.PI / 180));
+            myVector.Add(0);
+
+            GlobalCoordinateSystem gcs = new GlobalCoordinateSystem(myNumbers, myVector); 
+
+            //GlobalCoordinateSystem gcs = new GlobalCoordinateSystem()
 
             foreach (Element elem in structuralFramingElements)
             {
@@ -800,14 +812,57 @@ namespace rebarBenderMulti
 
             }
 
+            foreach (RAMBeam ramBeam in ramBeamsList)
+            {
+                //SET UP A LINE IN GLOBAL REVIT COORDINATES FOR REVIEW
+                ramBeam.ConvertToGlobal(ramBeam.StartPoint, ramBeam.EndPoint, gcs);
+                
+
+                // Add the line to the mapCanvas
+                mapCanvas.Children.Add(ramBeam.CustomLine);
+
+                // Set the position of the TextBlock
+                Canvas.SetLeft(ramBeam.beamName, ramBeam.centerX);
+                Canvas.SetTop(ramBeam.beamName, ramBeam.centerY);
+
+                //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
+                // Calculate the angle between the beam and the horizontal axis
+                double angle = Math.Atan2(ramBeam.CustomLine.Y2 - ramBeam.CustomLine.Y1, ramBeam.CustomLine.X2 - ramBeam.CustomLine.X1) * (180 / Math.PI);
+
+                // Apply rotation transform to the TextBlock
+                ramBeam.beamName.RenderTransform = new RotateTransform(angle, ramBeam.beamName.ActualWidth / 2, ramBeam.beamName.ActualHeight / 2);
+
+                mapCanvas.Children.Add(ramBeam.beamName);
+            }
+
             // Set the revitBeamsList property of mapBeamsWindow after adding elements to the list
             mapBeamsWindow.revitBeamsList = revitBeamsList;
+            mapBeamsWindow.ramBeamsList = ramBeamsList;
 
             // Update the layout
             mapCanvas.UpdateLayout();
             // Show the mapWindow as a dialog
             mapBeamsWindow.ShowDialog();
         }
+
+        private void selectFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            // Set the file filter to restrict to .rss files
+            openFileDialog.Filter = "RSS Files (*.rss)|*.rss|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Get the selected file path
+                string selectedFilePath = openFileDialog.FileName;
+
+                // Now you can use the selectedFilePath as needed
+                // For example, you can display it in a MessageBox or store it in a variable.
+                MessageBox.Show($"Selected File: {selectedFilePath}");
+            }
+        }
+
+
     }
 }
 
