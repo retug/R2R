@@ -66,6 +66,11 @@ namespace rebarBenderMulti
         private System.Windows.Point ramLastMousePosition;
         private List<System.Windows.Shapes.Line> ramSelectedLines = new List<System.Windows.Shapes.Line>();
 
+        //Revit Beam List
+        public List<RevitBeam> revitBeamsList = new List<RevitBeam>();
+        
+
+
         public MainWindow(UIDocument UiDoc )
         {
             uidoc = UiDoc;
@@ -761,6 +766,8 @@ namespace rebarBenderMulti
             // Create an instance of the MapBeamsWindow
             mapWindow mapBeamsWindow = new mapWindow();
 
+            
+
             // Set the mapCanvas property of mapBeamsWindow
             mapBeamsWindow.mapCanvas = mapBeamsWindow.FindName("mapCanvas") as Canvas;
 
@@ -772,47 +779,34 @@ namespace rebarBenderMulti
             foreach (Element elem in structuralFramingElements)
             {
                 RevitBeam myRevitBeam = new RevitBeam(elem);
+                revitBeamsList.Add(myRevitBeam);
+                
                 // Add the line to the mapCanvas
                 mapCanvas.Children.Add(myRevitBeam.CustomLine);
 
-
-                // Create TextBlock for ElementType name
-                TextBlock ElementTypeText = new TextBlock
-                {
-                    Text = myRevitBeam.ElementTypeName,
-                    Foreground = Brushes.Black,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Opacity = 0.5 // Adjust the value based on your preference
-
-                };
-
                 // Set the position of the TextBlock
-                Canvas.SetLeft(ElementTypeText, myRevitBeam.centerX);
-                Canvas.SetTop(ElementTypeText, myRevitBeam.centerY);
+                Canvas.SetLeft(myRevitBeam.beamName, myRevitBeam.centerX);
+                Canvas.SetTop(myRevitBeam.beamName, myRevitBeam.centerY);
 
+                //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
                 // Calculate the angle between the beam and the horizontal axis
                 double angle = Math.Atan2(myRevitBeam.CustomLine.Y2 - myRevitBeam.CustomLine.Y1, myRevitBeam.CustomLine.X2 - myRevitBeam.CustomLine.X1) * (180 / Math.PI);
 
                 // Apply rotation transform to the TextBlock
-                ElementTypeText.RenderTransform = new RotateTransform(angle, ElementTypeText.ActualWidth / 2, ElementTypeText.ActualHeight / 2);
+                myRevitBeam.beamName.RenderTransform = new RotateTransform(angle, myRevitBeam.beamName.ActualWidth / 2, myRevitBeam.beamName.ActualHeight / 2);
 
-                mapCanvas.Children.Add(ElementTypeText);
+                mapCanvas.Children.Add(myRevitBeam.beamName);
 
 
             }
 
+            // Set the revitBeamsList property of mapBeamsWindow after adding elements to the list
+            mapBeamsWindow.revitBeamsList = revitBeamsList;
 
             // Update the layout
             mapCanvas.UpdateLayout();
             // Show the mapWindow as a dialog
-            //mapBeamsWindow.ShowDialog();
-
-            // Show the mapWindow as a dialog
             mapBeamsWindow.ShowDialog();
-
-
-
         }
     }
 }

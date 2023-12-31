@@ -23,6 +23,8 @@ namespace rebarBenderMulti
         //Revit Canvas Factors
         private double mapZoomFactor = 1.0;
         private System.Windows.Point mapLastMousePosition;
+        public List<RevitBeam> revitBeamsList { get; set; }
+
 
         public mapWindow()
         {
@@ -34,6 +36,7 @@ namespace rebarBenderMulti
             mapCanvas.MouseLeftButtonDown += mapCanvas_MouseLeftButtonDown;
             mapCanvas.MouseMove += mapCanvas_MouseMove;
             mapCanvas.MouseLeftButtonUp += mapCanvas_MouseLeftButtonUp;
+            
         }
 
         // ZOOMING FUNCTION
@@ -44,7 +47,7 @@ namespace rebarBenderMulti
             if (e.Delta > 0)
             {
                 // Zoom in
-                mapZoomFactor *= 1.2; // You can adjust the zoom factor as needed
+                mapZoomFactor *= 1.2; 
             }
             else
             {
@@ -95,6 +98,59 @@ namespace rebarBenderMulti
             transformGroup.Children.Add(new ScaleTransform(mapZoomFactor, mapZoomFactor));
             transformGroup.Children.Add(new TranslateTransform(mapCanvas.RenderTransform.Value.OffsetX, mapCanvas.RenderTransform.Value.OffsetY));
             mapCanvas.RenderTransform = transformGroup;
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Checked_Revit(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+
+            if (checkBox.IsChecked == true)
+            {
+                // Checkbox is checked, add all RevitBeams to the canvas
+                foreach (RevitBeam revitBeam in revitBeamsList)
+                {
+                    mapCanvas.Children.Add(revitBeam.CustomLine);
+
+                    //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
+                    // Calculate the angle between the beam and the horizontal axis
+                    double angle = Math.Atan2(revitBeam.CustomLine.Y2 - revitBeam.CustomLine.Y1, revitBeam.CustomLine.X2 - revitBeam.CustomLine.X1) * (180 / Math.PI);
+
+                    // Apply rotation transform to the TextBlock
+                    revitBeam.beamName.RenderTransform = new RotateTransform(angle, revitBeam.beamName.ActualWidth / 2, revitBeam.beamName.ActualHeight / 2);
+
+                    mapCanvas.Children.Add(revitBeam.beamName);
+                }
+            }
+            else
+            {
+                // Checkbox is unchecked, remove all RevitBeams from the canvas
+                foreach (RevitBeam revitBeam in revitBeamsList)
+                {
+                    mapCanvas.Children.Remove(revitBeam.CustomLine);
+                    mapCanvas.Children.Remove(revitBeam.beamName);
+                }
+            }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (transparencyValueText != null)
+            {
+                double transparencyValue = transparencySlider.Value;
+                transparencyValueText.Text = transparencySlider.Value.ToString("P0");
+
+                foreach (RevitBeam revitBeam in revitBeamsList)
+                {
+                    // Update opacity of beamName TextBlock
+                    revitBeam.beamName.Opacity = 1 - transparencyValue;
+                    revitBeam.CustomLine.Opacity = 1 - transparencyValue;
+                }
+            }
         }
     }
 }

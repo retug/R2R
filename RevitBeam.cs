@@ -20,6 +20,7 @@ using Microsoft.Win32;
 using Point = System.Windows.Point;
 using System.Windows.Shapes;
 using Line = System.Windows.Shapes.Line;
+using System.Windows;
 
 
 namespace rebarBenderMulti
@@ -33,6 +34,8 @@ namespace rebarBenderMulti
         public string ElementTypeName { get; private set; }
         public double centerX { get; private set; }
         public double centerY { get; private set; }
+
+        public TextBlock beamName { get; private set; }
 
         public RevitBeam(Element elem)
         {
@@ -75,6 +78,19 @@ namespace rebarBenderMulti
                 StrokeThickness = 2,
                 Opacity = 0.5
             };
+
+            // Create TextBlock for ElementType name
+            beamName = new TextBlock
+            {
+                Text = ElementTypeName,
+                Foreground = Brushes.Black,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Opacity = 0.5 // Adjust the value based on your preference
+
+            };
+
+
         }
     }
 }
