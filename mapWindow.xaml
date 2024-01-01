@@ -24,7 +24,13 @@
             <TextBlock Text="Data" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             <!-- DataGrid in Row 1 -->
-            <DataGrid Grid.Row="1" Name="yourDataGridName" />
+            <DataGrid Grid.Row="1" Name="ramBeamMapping" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Beam Length" Binding="{Binding BeamLength}" />
+                    <DataGridCheckBoxColumn Header="Mapped" Binding="{Binding Mapped}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
 
         <!-- Second Column -->
@@ -59,7 +65,7 @@
                 <!-- Transparency Label -->
                 <TextBlock Text="Transparency" Margin="5"/>
                 <!-- Slider -->
-                <Slider x:Name="ramTransparencySlider" Minimum="0" Maximum="1" Value="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" TickPlacement="BottomRight" ValueChanged="ramSlider_ValueChanged"/>
+                <Slider x:Name="ramTransparencySlider" Minimum="0" Maximum="1" Value="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" TickPlacement="BottomRight" ValueChanged="ramSlider_ValueChanged" Background="White"/>
 
                 <!-- Transparency Value -->
                 <TextBlock x:Name="ramTransparencyValueText" Text="{Binding ElementName=ramTransparencySlider, Path=Value, StringFormat={}{0:P0}}" Margin="5"/>
@@ -73,6 +79,15 @@
 
                 <!-- Transparency Value -->
                 <TextBlock x:Name="transparencyValueText" Text="{Binding ElementName=transparencySlider, Path=Value, StringFormat={}{0:P0}}" Margin="5"/>
+
+                <TextBlock Text="Tolerance (ft)" VerticalAlignment="Center" Padding="5"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="DisplayTol" Width="100" VerticalAlignment="Center" Padding="5"/>
+                    <TextBox x:Name="TolTextBox" Width="100" Visibility="Hidden" TextChanged="TolTextBox_TextChanged"></TextBox>
+                </StackPanel>
+
+                <!-- Button 2: Import -->
+                <Button Content="Map the Beams" Click="mapButton_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

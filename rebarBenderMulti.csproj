@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Mapping.cs" />
     <Compile Include="RAMInfo.cs" />
     <Compile Include="RAMBeam.cs" />
     <Compile Include="RAMGrid.cs" />

@@ -23,6 +23,9 @@ namespace rebarBenderMulti
         public double centerX { get; private set; }
         public double centerY { get; private set; }
 
+        public Point gloStartPoint { get; private set; }
+        public Point gloEndPoint { get; private set; }
+
         public TextBlock beamName { get; private set; }
 
         public RAMBeam(string Name, List<double> StartPoint, List<double> EndPoint, double BeamLength)
@@ -44,21 +47,21 @@ namespace rebarBenderMulti
             endRAMPoint.Convert_To_Global(gcs);
 
             //These are the points that have been converted into the global Revit coordinate system
-            Point startPoint = new Point(startRAMPoint.X/12, startRAMPoint.Y/12);
+            gloStartPoint= new Point(startRAMPoint.X/12, -startRAMPoint.Y/12);
             //These are the points that have been converted into the global Revit coordinate system
-            Point endPoint= new Point(endRAMPoint.X/12, endRAMPoint.Y/12);
+            gloEndPoint = new Point(endRAMPoint.X/12, -endRAMPoint.Y/12);
 
             // Calculate the center point of the line
-            centerX = (startPoint.X + endPoint.X) / 2;
-            centerY = (startPoint.Y + endPoint.Y) / 2;
+            centerX = (gloStartPoint.X + gloEndPoint.X) / 2;
+            centerY = (gloStartPoint.Y + gloEndPoint.Y) / 2;
 
             // Initialize or set up your System.Windows.Shapes.Line as needed
             CustomLine = new System.Windows.Shapes.Line
             {
-                X1 = startPoint.X,
-                Y1 = startPoint.Y,
-                X2 = endPoint.X,
-                Y2 = endPoint.Y,
+                X1 = gloStartPoint.X,
+                Y1 = gloStartPoint.Y,
+                X2 = gloEndPoint.X,
+                Y2 = gloEndPoint.Y,
                 Stroke = Brushes.Blue,
                 StrokeThickness = 2,
                 Opacity = 0.5

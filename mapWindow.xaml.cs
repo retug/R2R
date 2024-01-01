@@ -26,6 +26,8 @@ namespace rebarBenderMulti
         public List<RevitBeam> revitBeamsList { get; set; }
         public List<RAMBeam> ramBeamsList { get; set; }
 
+        
+
 
         public mapWindow()
         {
@@ -37,7 +39,12 @@ namespace rebarBenderMulti
             mapCanvas.MouseLeftButtonDown += mapCanvas_MouseLeftButtonDown;
             mapCanvas.MouseMove += mapCanvas_MouseMove;
             mapCanvas.MouseLeftButtonUp += mapCanvas_MouseLeftButtonUp;
-            
+
+            // Set the default value for DisplayTol and hidden TolTextBox
+            DisplayTol.Text = "1.0'";
+            TolTextBox.Text = "1.0";
+
+
         }
 
         // ZOOMING FUNCTION
@@ -194,6 +201,41 @@ namespace rebarBenderMulti
                     ramBeam.beamName.Opacity = 1 - ramTransparencyValue;
                     ramBeam.CustomLine.Opacity = 1 - ramTransparencyValue;
                 }
+            }
+        }
+
+        private void TolTextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Set the default value for TolTextBox
+            TolTextBox.Text = "1.0";
+        }
+
+        private void TolTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Update DisplayTol when TolTextBox changes
+            DisplayTol.Text = TolTextBox.Text + "'";
+        }
+
+        private void mapButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Read the actual value from TolTextBox (without the quote)
+            string tol = TolTextBox.Text;
+
+            // Convert the value to double
+            if (double.TryParse(tol, out double tolValue))
+            {
+                // Use tolValue as needed
+                MessageBox.Show("Tolerance Value: " + tolValue);
+                // Create an instance of the Mapping class
+                Mapping mapping = new Mapping();
+                mapping.MapRAMBeams(ramBeamsList, revitBeamsList, tolValue);
+                // Set the ItemsSource of the DataGrid
+                ramBeamMapping.ItemsSource = ramBeamsList;
+            }
+            else
+            {
+                // Handle the case where the input is not a valid double
+                MessageBox.Show("Invalid Tolerance Value");
             }
         }
     }

@@ -778,7 +778,8 @@ namespace rebarBenderMulti
             // Access the mapCanvas using the property
             Canvas mapCanvas = mapBeamsWindow.mapCanvas;
 
-            List<double> myNumbers = new List<double> { (double)XValue, (double)YValue, 0 };
+            //ram offsets are in inches, have to multiply by 12, should be a better way to handle this moving forward.
+            List<double> myNumbers = new List<double> { (double)XValue*12, (double)YValue*12, 0 };
             List<double> myVector = new List<double>();
             myVector.Add(Math.Cos((double)RotValue * Math.PI / 180));
             myVector.Add(Math.Sin((double)RotValue * Math.PI / 180));
@@ -861,7 +862,6 @@ namespace rebarBenderMulti
                 MessageBox.Show($"Selected File: {selectedFilePath}");
             }
         }
-
 
     }
 }
