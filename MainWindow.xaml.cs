@@ -50,6 +50,8 @@ namespace rebarBenderMulti
         // Declare structuralFramingElements as a field or property
         public IEnumerable<Element> structuralFramingElements { get; set; }
 
+        public string ramFilePath { get; set; }
+
         public List<RAMBeam> BeamInfo { get; set; }
         //public Canvas mapCanvas { get; set; }
 
@@ -402,12 +404,9 @@ namespace rebarBenderMulti
 
         private void getRAMResults_Click(object sender, RoutedEventArgs e)
         {
-           
-            MessageBox.Show("You clicked me");
-            string RSSFileName = "I:\\Common\\06 Employee Personal Folders\\Austin Guter\\TestRAMModel\\testModel.rss";
-            //ramFloorComboBox.Items = RAMInfo.GET_STORY_NAMES(RSSFileName);
-            
-            List<string> storyNames = RAMInfo.GET_STORY_NAMES(RSSFileName);
+            //string RSSFileName = "I:\\Common\\06 Employee Personal Folders\\Austin Guter\\TestRAMModel\\testModel.rss";
+                        
+            List<string> storyNames = RAMInfo.GET_STORY_NAMES(ramFilePath);
             // Set the ItemsSource of the ramFloorComboBox to the list of story names
             ramFloorComboBox.ItemsSource = storyNames;
 
@@ -417,20 +416,20 @@ namespace rebarBenderMulti
         {
             if (ramFloorComboBox.SelectedIndex > -1) //somthing was selected
             {
-                string RSSFileName = "I:\\Common\\06 Employee Personal Folders\\Austin Guter\\TestRAMModel\\testModel.rss";
+                //string RSSFileName = "I:\\Common\\06 Employee Personal Folders\\Austin Guter\\TestRAMModel\\testModel.rss";
                 int storyValue = ramFloorComboBox.SelectedIndex;
                 List<string> gridNames = new List<string>();
                 List<RAMGrid> Grid_List = new List<RAMGrid>();
                 List<r2rPoint> Point_List = new List<r2rPoint>();
                 List<CustomLine> ramGridsGathered = new List<CustomLine>();
 
-                gridNames = RAMInfo.GET_GRID_NAMES(RSSFileName, storyValue, ref Grid_List, ref Point_List, ref ramGridsGathered);
+                gridNames = RAMInfo.GET_GRID_NAMES(ramFilePath, storyValue, ref Grid_List, ref Point_List, ref ramGridsGathered);
 
                 // Extract the Beam Locations from a given Level
 
                 List<RAMBeam> BeamInfo = new List<RAMBeam>();
 
-                RAMInfo.GET_BEAM_INFO(RSSFileName, storyValue, ref BeamInfo);
+                RAMInfo.GET_BEAM_INFO(ramFilePath, storyValue, ref BeamInfo);
 
                 ramBeamsList = BeamInfo;
 
@@ -534,6 +533,10 @@ namespace rebarBenderMulti
 
             RotTextBox.Text = rot.ToString();
 
+            XValue = (decimal)offsetX;
+            YValue = (decimal)offsetY;
+            RotValue = (decimal)RotValue;
+
             // Bind the event handler to the TextChanged event of the TextBox controls.
             XTextBox.TextChanged += TextBox_TextChanged;
             YTextBox.TextChanged += TextBox_TextChanged;
@@ -598,14 +601,23 @@ namespace rebarBenderMulti
                 return;
             }
 
+            // Check if a RAM file has been selected
+            if (string.IsNullOrEmpty(ramFilePath))
+            {
+                MessageBox.Show("Please select a RAM file before saving.");
+                return;
+            }
+
             // Read the current values of XValue and YValue
             decimal currentXValue = XValue;
             decimal currentYValue = YValue;
             decimal currentRotValue = RotValue;
+            string ramFile = ramFilePath;
+            
 
 
             // Create an instance of a class to hold XValue and YValue
-            var data = new { XValue = currentXValue, YValue = currentYValue, RotValue = currentRotValue };
+            var data = new { XValue = currentXValue, YValue = currentYValue, RotValue = currentRotValue, RamFilePath = ramFile };
 
 
             // Convert the object to a JSON string
@@ -654,17 +666,21 @@ namespace rebarBenderMulti
                     // Read the JSON file
                     string json = System.IO.File.ReadAllText(openFileDialog.FileName);
 
+
                     // Deserialize the JSON string to an anonymous type with XValue and YValue properties
-                    var data = JsonConvert.DeserializeAnonymousType(json, new { XValue = default(decimal), YValue = default(decimal), RotValue = default(decimal) });
+                    var data = JsonConvert.DeserializeAnonymousType(json, new { XValue = default(decimal), YValue = default(decimal), RotValue = default(decimal), RamFilePath = string.Empty });
 
                     // Set the values to XValue and YValue
                     XValue = data.XValue;
                     YValue = data.YValue;
                     RotValue = data.RotValue;
+                    ramFilePath = data.RamFilePath;
+
                     // Update the TextBox controls with the loaded values
                     XTextBox.Text = XValue.ToString();
                     YTextBox.Text = YValue.ToString();
                     RotTextBox.Text = RotValue.ToString();
+
 
                     MessageBox.Show("JSON data loaded successfully!");
                 }
@@ -789,6 +805,12 @@ namespace rebarBenderMulti
 
             //GlobalCoordinateSystem gcs = new GlobalCoordinateSystem()
 
+            if (structuralFramingElements == null)
+            {
+                MessageBox.Show($"You must select revit beams", "Selection Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             foreach (Element elem in structuralFramingElements)
             {
                 RevitBeam myRevitBeam = new RevitBeam(elem);
@@ -855,13 +877,14 @@ namespace rebarBenderMulti
             if (openFileDialog.ShowDialog() == true)
             {
                 // Get the selected file path
-                string selectedFilePath = openFileDialog.FileName;
+                ramFilePath = openFileDialog.FileName;
 
                 // Now you can use the selectedFilePath as needed
                 // For example, you can display it in a MessageBox or store it in a variable.
-                MessageBox.Show($"Selected File: {selectedFilePath}");
+                MessageBox.Show($"Selected File: {ramFilePath}");
             }
         }
+
 
     }
 }

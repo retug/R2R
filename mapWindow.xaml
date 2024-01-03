@@ -24,7 +24,7 @@
             <TextBlock Text="Data" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             <!-- DataGrid in Row 1 -->
-            <DataGrid Grid.Row="1" Name="ramBeamMapping" AutoGenerateColumns="False">
+            <DataGrid Grid.Row="1" Name="ramBeamMapping" AutoGenerateColumns="False" SelectionChanged="ramBeamMapping_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Beam Length" Binding="{Binding BeamLength}" />

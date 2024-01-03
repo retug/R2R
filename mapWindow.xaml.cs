@@ -149,16 +149,19 @@ namespace rebarBenderMulti
                 // Checkbox is checked, add all RevitBeams to the canvas
                 foreach (RevitBeam revitBeam in revitBeamsList)
                 {
-                    mapCanvas.Children.Add(revitBeam.CustomLine);
+                    if (revitBeam.CustomLine != null && !mapCanvas.Children.Contains(revitBeam.CustomLine))
+                    {
+                        mapCanvas.Children.Add(revitBeam.CustomLine);
 
-                    //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
-                    // Calculate the angle between the beam and the horizontal axis
-                    double angle = Math.Atan2(revitBeam.CustomLine.Y2 - revitBeam.CustomLine.Y1, revitBeam.CustomLine.X2 - revitBeam.CustomLine.X1) * (180 / Math.PI);
+                        //ENSURE THAT BEAM TEXT IS ALIGNED WITH ORIENTATION OF THE BEAM
+                        // Calculate the angle between the beam and the horizontal axis
+                        double angle = Math.Atan2(revitBeam.CustomLine.Y2 - revitBeam.CustomLine.Y1, revitBeam.CustomLine.X2 - revitBeam.CustomLine.X1) * (180 / Math.PI);
 
-                    // Apply rotation transform to the TextBlock
-                    revitBeam.beamName.RenderTransform = new RotateTransform(angle, revitBeam.beamName.ActualWidth / 2, revitBeam.beamName.ActualHeight / 2);
+                        // Apply rotation transform to the TextBlock
+                        revitBeam.beamName.RenderTransform = new RotateTransform(angle, revitBeam.beamName.ActualWidth / 2, revitBeam.beamName.ActualHeight / 2);
 
-                    mapCanvas.Children.Add(revitBeam.beamName);
+                        mapCanvas.Children.Add(revitBeam.beamName);
+                    }
                 }
             }
             else
@@ -236,6 +239,27 @@ namespace rebarBenderMulti
             {
                 // Handle the case where the input is not a valid double
                 MessageBox.Show("Invalid Tolerance Value");
+            }
+        }
+
+        private void ramBeamMapping_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Clear the previous selection's color
+            foreach (RAMBeam ramBeam in ramBeamsList)
+            {
+                if (ramBeam.CustomLine != null)
+                {
+                    ramBeam.CustomLine.Stroke = Brushes.Blue;
+                }
+            }
+
+            // Get the selected item
+            RAMBeam selectedRAMBeam = ramBeamMapping.SelectedItem as RAMBeam;
+
+            if (selectedRAMBeam != null && selectedRAMBeam.CustomLine != null)
+            {
+                // Change the stroke color to green for the selected item
+                selectedRAMBeam.CustomLine.Stroke = Brushes.Green;
             }
         }
     }

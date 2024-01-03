@@ -41,10 +41,6 @@ namespace rebarBenderMulti
                 {
                     if (j < remRevitBeamList.Count)
                     {
-                        //System.Windows.Point RAM_BEAM_point_1a = new System.Windows.Point(ramBeamList[i].StartPoint[0], ramBeamList[i].StartPoint[1]);
-                        //System.Windows.Point RAM_BEAM_point_1a = ramBeamList[i].gloStartPoint;
-                        //System.Windows.Point RAM_BEAM_point_2a = ramBeamList[i].gloEndPoint;
-
                         // Get the start and end points of the structural framing element
                         Element RevitElement = remRevitBeamList[j].RevitElement;
                         LocationCurve locationCurve = (RevitElement.Location as LocationCurve);
@@ -58,9 +54,6 @@ namespace rebarBenderMulti
                         //check for any order of beam orientation
                         double dist_1a = calc_distance(RAM_BEAM_point_1a, REVIT_BEAM_point_1);
                         double dist_2a = calc_distance(RAM_BEAM_point_2a, REVIT_BEAM_point_2);
-
-                        //System.Windows.Point RAM_BEAM_point_1b = ramBeamList[i].gloEndPoint;
-                        //System.Windows.Point RAM_BEAM_point_2b = ramBeamList[i].gloStartPoint;
 
                         double dist_1b = calc_distance(RAM_BEAM_point_1b, REVIT_BEAM_point_1);
                         double dist_2b = calc_distance(RAM_BEAM_point_2b, REVIT_BEAM_point_2);

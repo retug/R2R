@@ -23,27 +23,24 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        
+
 
         <!-- Buttons Row, centered in column 0 -->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <!-- Add a new button for file selection -->
-            <Button Content="Select RAM File" Margin="5" Click="selectFile_Click"/>
+            <!-- Add a new button for file selection -->
+            <Button Content="Select RAM File" Click="selectFile_Click"/>
             <Button Content="Gather RAM Level" Margin="5" Click="getRAMResults_Click" />
             <!-- Add ListBox centered below the button -->
-            <ListBox Name="ramFloorComboBox" Width="100" Height="25" HorizontalAlignment="Center" />
+            <ListBox x:Name="ramFloorComboBox" Width="100" Height="25" HorizontalAlignment="Center" />
             <Button Content="Select Level" Margin="5" Click="getGridInfo_Click"/>
-
         </StackPanel>
 
         <!-- Buttons Row, centered in column 1 -->
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="GatherGridsButton" Content="Gather Revit Grids" Margin="5" Click="GatherGridsButton_Click" />
             <Button x:Name="GatherBeamsButton" Content="Select Revit Beams" Margin="5" Click="GatherBeamsButton_Click"  />
-            
         </StackPanel>
-        
-        
 
         <!-- Left column content RAM Info, ROW 2 COLUMN 0 -->
         <ScrollViewer Name="scrollViewer" Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -79,8 +76,8 @@
             <!-- List of selected line names -->
             <ListBox Name="revitSelectedLinesListBox" Width="200" Height="100" VerticalAlignment="Top" />
         </StackPanel>
-        
-        
+
+
         <Grid Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -88,7 +85,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition />
-                
+
             </Grid.ColumnDefinitions>
 
             <!-- Button 1: Save -->
@@ -131,7 +128,7 @@
 
             <!-- Spacer -->
             <GridSplitter Grid.Column="2" Width="20" HorizontalAlignment="Stretch" />
-            
+
 
             <!-- Button 2: Import -->
             <TextBlock Grid.Column="3" Text="Y" VerticalAlignment="Center" Padding="5" />
