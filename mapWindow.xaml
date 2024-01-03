@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:rebarBenderMulti"
         mc:Ignorable="d"
         Title="R2R - Mapping Window" Height="1000" Width="2000">
+    <Window.Resources>
+        <local:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -18,10 +21,13 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <!-- Add another row for REVIT Beams Unmapped -->
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!-- Title in Row 0 -->
-            <TextBlock Text="Data" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="RAM-REVIT BEAMS MAPPED" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             <!-- DataGrid in Row 1 -->
             <DataGrid Grid.Row="1" Name="ramBeamMapping" AutoGenerateColumns="False" SelectionChanged="ramBeamMapping_SelectionChanged">
@@ -29,8 +35,31 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Beam Length" Binding="{Binding BeamLength}" />
                     <DataGridCheckBoxColumn Header="Mapped" Binding="{Binding Mapped}" />
+                    <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" />
                 </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Mapped}" Value="True" />
+                                    <Condition Binding="{Binding Comment, Converter={StaticResource StringIsNotEmptyConverter}}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" Value="Yellow" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
             </DataGrid>
+
+            <!-- Title for RAM Beams Unmapped in Row 2 -->
+            <TextBlock Text="RAM Beams Unmapped" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" />
+
+            <!-- DataGrid for RAM Beams Unmapped in Row 3 -->
+            <DataGrid Grid.Row="3" Name="ramUnmappedBeamGrid" AutoGenerateColumns="False">
+                <!-- Add columns as needed -->
+            </DataGrid>
+
         </Grid>
 
         <!-- Second Column -->
@@ -41,7 +70,7 @@
             </Grid.RowDefinitions>
 
             <!-- Centered Text in Row 0 -->
-            <TextBlock Text="Window" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="Mapping Plane" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             <!-- Blank Canvas in Row 1 -->
             <ScrollViewer Name="scrollViewer" Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -57,7 +86,7 @@
             </Grid.RowDefinitions>
 
             <!-- Centered Text in Row 0 -->
-            <TextBlock Text="Check" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="Visibility Control" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             <!-- Checkboxes in Row 1 -->
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">

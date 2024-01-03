@@ -63,10 +63,15 @@ namespace rebarBenderMulti
                         if ((dist_1a <= tol && dist_2a <= tol) || (dist_1b <= tol && dist_2b <= tol))
                         {
                             ramBeamList[i].Mapped = true;
-
                             // Find the index of the targetBeam in revitBeamList
+                            
                             int index = revitBeamList.IndexOf(remRevitBeamList[j]);
                             revitBeamList[index].Mapped = true;
+                            //IF THE BEAMS BETWEEN REVIT AND RAM DO NOT MATCH
+                            if (ramBeamList[i].beamName.Text != revitBeamList[index].beamName.Text.ToUpper())   
+                            {
+                                ramBeamList[i].Comment = $"Revit beam: {revitBeamList[index].beamName.Text}";
+                            }
                             mapped = true;
                             remRevitBeamList.RemoveAt(j);
                         }

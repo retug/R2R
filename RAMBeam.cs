@@ -25,6 +25,7 @@ namespace rebarBenderMulti
 
         public Point gloStartPoint { get; private set; }
         public Point gloEndPoint { get; private set; }
+        public string Comment { get; set; }
 
         public TextBlock beamName { get; private set; }
 
@@ -34,6 +35,7 @@ namespace rebarBenderMulti
             this.StartPoint = StartPoint;
             this.EndPoint = EndPoint;
             this.BeamLength = BeamLength;
+            this.Comment = string.Empty;
         }
 
         public void ConvertToGlobal(List<double> StartPoint, List<Double> EndPoint, GlobalCoordinateSystem gcs)
@@ -52,8 +54,8 @@ namespace rebarBenderMulti
             gloEndPoint = new Point(endRAMPoint.X/12, -endRAMPoint.Y/12);
 
             // Calculate the center point of the line
-            centerX = (gloStartPoint.X + gloEndPoint.X) / 2;
-            centerY = (gloStartPoint.Y + gloEndPoint.Y) / 2;
+            centerX = ((gloStartPoint.X + gloEndPoint.X) / 2)-5;
+            centerY = ((gloStartPoint.Y + gloEndPoint.Y) / 2)-1;
 
             // Initialize or set up your System.Windows.Shapes.Line as needed
             CustomLine = new System.Windows.Shapes.Line
@@ -74,7 +76,8 @@ namespace rebarBenderMulti
                 Foreground = Brushes.Blue,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Opacity = 0.5 
+                Opacity = 0.5, 
+                FontSize = 4
             };
         }
     }

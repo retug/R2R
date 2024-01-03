@@ -79,6 +79,7 @@
       <DependentUpon>mapWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringIsNotEmptyConverter.cs" />
     <Compile Include="YourCommandName.cs" />
   </ItemGroup>
   <ItemGroup>

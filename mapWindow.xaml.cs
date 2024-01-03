@@ -227,8 +227,6 @@ namespace rebarBenderMulti
             // Convert the value to double
             if (double.TryParse(tol, out double tolValue))
             {
-                // Use tolValue as needed
-                MessageBox.Show("Tolerance Value: " + tolValue);
                 // Create an instance of the Mapping class
                 Mapping mapping = new Mapping();
                 mapping.MapRAMBeams(ramBeamsList, revitBeamsList, tolValue);

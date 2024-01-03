@@ -62,8 +62,8 @@ namespace rebarBenderMulti
             Point endWpfPoint = new Point(endPoint.X, -endPoint.Y);
 
             // Calculate the center point of the line
-            centerX = (startWpfPoint.X + endWpfPoint.X) / 2;
-            centerY = (startWpfPoint.Y + endWpfPoint.Y) / 2;
+            centerX = ((startWpfPoint.X + endWpfPoint.X) / 2)-5;
+            centerY = ((startWpfPoint.Y + endWpfPoint.Y) / 2)-1 ;
 
 
             // Initialize or set up your System.Windows.Shapes.Line as needed
@@ -83,10 +83,11 @@ namespace rebarBenderMulti
             beamName = new TextBlock
             {
                 Text = ElementTypeName,
-                Foreground = Brushes.Black,
+                Foreground = Brushes.Red,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Opacity = 0.5 // Adjust the value based on your preference
+                Opacity = 0.5, // Adjust the value based on your preference
+                FontSize = 4
 
             };
 
